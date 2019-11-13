@@ -3,11 +3,24 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>all_users</title>
+    <style>
+       table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+}
+
+    </style>
 </head>
 <body>
 
-<?php
-// erreur a corriger 
+    <h1> All users </h1>
+<?php 
     $host = 'localhost';
     $db = 'my_activities';
     $user = 'root';
@@ -24,12 +37,19 @@
     } catch (PDOException $e) {
          throw new PDOException($e->getMessage(), (int)$e->getCode());
     }
-
-    $stmt = $pdo->query('SELECT * FROM users ORDER BY username');
+    echo "<table border><tr><th>Id</th><th>Username</th><th>Email</th><th>Status</th></tr>";
+    $stmt = $pdo->query('SELECT * FROM users JOIN status s ON users.status_id = s.id ORDER BY username');
     while ($row = $stmt->fetch())
     {
-        echo $row['*'] . "\n";
+        echo "<tr>";
+        echo "<td>".$row['id']."</td>";
+        echo "<td>".$row['username']."</td>";
+        echo "<td>".$row['email']."</td>";
+        echo "<td>".$row['name']."</td>";
+        echo "</tr>";
+
     }
+    echo "</table>";
 
 ?>
 </body>
