@@ -46,7 +46,6 @@
         <SELECT name="statut">
             <OPTION VALUE="1">Waiting for account validation</OPTION>
             <OPTION VALUE="2">Active account</OPTION>
-            <OPTION VALUE="3">Waiting for account deletion</OPTION>
         </select>
         <INPUT type="submit" value="Rechercher">
     </form>
