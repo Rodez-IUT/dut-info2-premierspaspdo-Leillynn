@@ -22,7 +22,7 @@
     <h1> All users </h1>
 <?php 
     $host = 'localhost';
-    $db = 'my_activities';
+    $db = 'my-activities';
     $user = 'root';
     $pass = 'root';
     $charset = 'utf8mb4';
@@ -37,9 +37,11 @@
     } catch (PDOException $e) {
          throw new PDOException($e->getMessage(), (int)$e->getCode());
     }
-    # a rajouter : WHERE username = e* AND s.id = 2 
-    echo "<table border><tr><th>Id</th><th>Username</th><th>Email</th><th>Status</th></tr>";
-    $stmt = $pdo->query('SELECT * FROM users JOIN status s ON users.status_id = s.id ORDER BY username');
+    $format = 'e%';
+    $idStatut = 2;
+    # a rajouter : WHERE username LIKE 'e%' AND s.id = 2 
+    echo "<table><tr><th>Id</th><th>Username</th><th>Email</th><th>Status</th></tr>";
+    $stmt = $pdo->query("SELECT * FROM users JOIN status s ON users.status_id = s.id  WHERE username LIKE '".$format."' AND s.id = ".$idStatut." ORDER BY username ");
     while ($row = $stmt->fetch())
     {
         echo "<tr>";
