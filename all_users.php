@@ -39,7 +39,7 @@
          throw new PDOException($e->getMessage(), (int)$e->getCode());
     }
     ?>
-    <form action=all_users.php method="post">
+    <form action=all_users.php method="get">
         <div>Saisissez la première lettre de l'username </div> 
         <INPUT type="text" name="tb_lettre"/>
         <div>choisissez le statut</div>
@@ -51,17 +51,23 @@
     </form>
 
     <?php
-    if(isset($_POST['tb_lettre']))
+    function get($name) {
+        return isset($_GET[$name]) ? $_GET[$name] : null;
+    }
+
+    if(isset($_GET['tb_lettre']) || isset($_GET['statut']))
     {
-        $format = $_POST['tb_lettre']."%";
-        $idStatut = "=".$_POST['statut'];
+        $start_letter = htmlspecialchars(get('tb_lettre').'%');
+        $status_id = (int)get("statut");
     } else {
-        $format = "%";
-        $idStatut = '<4';
+        $start_letter ='%';
+        $status_id = 1;
     }
 
     echo "<table><tr><th>Id</th><th>Username</th><th>Email</th><th>Status</th></tr>";
-    $stmt = $pdo->query("SELECT u.id as user_id, username, email, s.name as status FROM users u JOIN status s ON u.status_id = s.id  WHERE username LIKE '".$format."' AND s.id ".$idStatut." ORDER BY username ");
+    $sql = "select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id where username like :start_letter and status_id = :status_id order by username";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['start_letter' => $start_letter, 'status_id' => $status_id]);
     while ($row = $stmt->fetch())
     {
         echo "<tr>";
